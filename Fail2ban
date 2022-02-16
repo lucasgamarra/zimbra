@@ -3,6 +3,17 @@
 #File: /etc/fail2ban/jail.local
 #Agrega lo siguente en el archivo:
 
+#edit by lgamarra
+
+[zimbra-webmail]
+enabled = true
+filter = zimbra-webmail
+action = iptables-multiport[name=Zimbra-webmail, port="80,8443", protocol=tcp]
+#sendmail[name=Zimbra-webmail, dest=servidoresbkp@data.com.py]
+logpath =  /opt/zimbra/log/mailbox.log
+bantime =  360000
+findtime = 600
+maxretry = 3
 
 [zimbra-submission]
 enabled = true
@@ -10,17 +21,8 @@ filter = zimbra-submission
 logpath = /var/log/zimbra.log
 maxretry = 3
 findtime = 3600
-bantime = 36000
+bantime =  360000
 action = iptables-multiport[name=zimbra-submission, port="25,465,587", protocol=tcp]
-
-[zimbra-webmail]
-enabled = true
-filter = zimbra-webmail
-logpath = /opt/zimbra/log/mailbox.log
-maxretry = 3
-findtime = 3600
-bantime = 36000
-action = iptables-multiport[name=zimbra-webmail, port="80,8443", protocol=tcp]
 
 [zimbra-admin]
 enabled = true
@@ -28,5 +30,28 @@ filter = zimbra-admin
 logpath = /opt/zimbra/log/mailbox.log
 maxretry = 3
 findtime = 3600
-bantime = 36000
+bantime =  360000
 action = iptables-multiport[name=zimbra-admin, port="7071", protocol=tcp]
+
+[zimbra-recipient]
+enabled = true
+filter = zimbra
+action = iptables-allports[name=zimbra-recipient]
+logpath = /var/log/zimbra.log
+bantime = 360000
+
+[zimbra-audit]
+enabled = true
+filter = zimbra
+action = iptables-allports[name=zimbra-audit]
+logpath = /opt/zimbra/log/audit.log
+#maxretry = 3
+#bantime = 360000
+
+[imap]
+enabled = true
+#port = imaps
+filter = imap
+action = iptables-multiport[name=Imap, port="143,993", protocol=tcp]
+#logpath = /opt/zimbra/log/mailbox.log
+                                             
