@@ -9,7 +9,7 @@
 enabled = true
 filter = zimbra-webmail
 action = iptables-multiport[name=Zimbra-webmail, port="80,8443", protocol=tcp]
-#sendmail[name=Zimbra-webmail, dest=servidoresbkp@data.com.py]
+#sendmail[name=Zimbra-webmail, dest=<email>]
 logpath =  /opt/zimbra/log/mailbox.log
 bantime =  360000
 findtime = 600
