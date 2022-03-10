@@ -1,0 +1,49 @@
+ESTADO_RANNING="status: running"
+ESTADO_INICIAL="status: idle"
+ESTADO_INICIO="status: started"
+echo "Iniciando el proceso de reindexado"
+
+for i in `cat /tmp/cuentas.txt`
+
+do
+#Captura el primer estado
+ESTADO=`zmprov rim $i status | grep status`
+
+if [ "$ESTADO" == "$ESTADO_INICIAL" ]; then
+
+echo "El reindexado no se esta ejecutando para la cuenta $i"
+echo "Ejecutando el indexado para la cuenta $i"
+zmprov rim $i start
+fi
+
+#Captura estado despues de iniciar
+
+ESTADO=`zmprov rim $i status | grep status`
+
+if [ "$ESTADO" == "$ESTADO_INICIO" ]; then
+
+echo "El reindexado inicio para la cuenta $i"
+
+fi
+#Captura si el estado esta corriendo
+
+ESTADO=`zmprov rim $i status | grep status`
+
+if [ "$ESTADO" == "$ESTADO_RANNING" ]; then
+
+echo "El reindexado se esta ejecutando para la cuenta $i"
+
+fi
+
+while [ "$ESTADO" == "$ESTADO_RANNING" ]
+do
+        ESTADO=`zmprov rim $i status | grep status`
+
+VERIFICAR_PROCESO=`zmprov rim $i status`
+echo "$VERIFICAR_PROCESO"
+
+sleep 10
+
+done
+echo "El indexado finalizo para la cuenta $i"
+done
